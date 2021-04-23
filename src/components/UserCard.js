@@ -15,7 +15,7 @@ function UserCard(props) {
 
     return (
         <Box style={{ position: "relative" }}>
-            <IconButton style={{ position: "absolute", top: "-1.5rem", right: "-1.5rem" }}>
+            <IconButton style={{ position: "absolute", top: "-1.6rem", right: "-1.5rem" }}>
                 <RemoveCircleRoundedIcon fontSize="default" htmlColor="rgb(200, 100, 100)" />
             </IconButton>
 
