@@ -57,7 +57,7 @@ function UserDisplay() {
             <Grid container justify="flex-start" alignItems="baseline" spacing={2} style={{ padding: "1rem" }}>
                 {
                     users ? users.map(user => (
-                        <Grid item xs={6} md={4}>
+                        <Grid item xs={12} sm={4}>
                             <UserCard
                                 htmlURL={user.html_url}
                                 avatarURL={user.avatar_url}
