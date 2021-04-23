@@ -1,5 +1,5 @@
 import './App.css';
-import { Container, Typography, Box, TextField, Button, Card, CardContent, Avatar, Link, CardHeader, CardMedia } from '@material-ui/core';
+import { Container, Typography, Box, TextField, Button, Card, CardContent, Link, CardHeader, CardMedia } from '@material-ui/core';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import { getUser } from './actions/userActions';
