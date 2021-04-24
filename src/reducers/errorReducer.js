@@ -1,4 +1,4 @@
-import { GET_ERRORS, CLEAR_ERRORS } from '../actions/types';
+import { GET_ERRORS, CLEAR_ERRORS, DUPLICATE_ERROR } from '../actions/types';
 
 const initialState = {
     msg: {},
@@ -20,6 +20,12 @@ export default function errorReducer(state = initialState, action) {
                 status: null,
                 id: null
             };
+        case DUPLICATE_ERROR:
+            return {
+                msg: action.payload.msg,
+                status: null,
+                id: action.payload.id
+            }
         default:
             return state;
     }

@@ -1,11 +1,14 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { removeUser } from '../actions/userActions';
+
 import { Box, Typography, Card, CardContent, Link, CardHeader, CardMedia, CardActions, IconButton, Collapse } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import HighlightOffIcon from '@material-ui/icons/HighlightOff';
-import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import RemoveCircleRoundedIcon from '@material-ui/icons/RemoveCircleRounded';
 
 function UserCard(props) {
+
+    const dispatch = useDispatch();
 
     const [expanded, setExpanded] = useState(false);
 
@@ -13,9 +16,13 @@ function UserCard(props) {
         setExpanded(!expanded);
     }
 
+    const handleRemove = () => {
+        dispatch(removeUser(props.login));
+    }
+
     return (
         <Box style={{ position: "relative" }}>
-            <IconButton style={{ position: "absolute", top: "-1.6rem", right: "-1.5rem" }}>
+            <IconButton onClick={handleRemove} style={{ position: "absolute", top: "-1.6rem", right: "-1.5rem" }}>
                 <RemoveCircleRoundedIcon fontSize="default" htmlColor="rgb(200, 100, 100)" />
             </IconButton>
 

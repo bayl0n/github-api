@@ -1,30 +1,39 @@
 import React, { useEffect, useState } from 'react';
-import { Container, Box, TextField, Button, Grid, Typography } from '@material-ui/core';
+import { Container, Box, TextField, Button, Grid, Typography, Snackbar } from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
 import { useDispatch, useSelector } from "react-redux";
-import { getUser, addUser } from '../actions/userActions';
-import { clearErrors } from '../actions/errorActions';
+import { addUser } from '../actions/userActions';
+import { clearErrors, duplicateError } from '../actions/errorActions';
 
 import UserCard from './UserCard';
+import { DUPLICATE_ERROR, USER_NOT_FOUND } from '../actions/types';
 
 function UserDisplay() {
     // Login search hook
     const [login, setLogin] = useState('');
     // Error alert hook
     const [errorMsg, setErrorMsg] = useState(null);
+    // Snackback open state hook
+    const [open, setOpen] = useState(false);
     // Action dispatch
     const dispatch = useDispatch();
     // Get user state from the store
-    const user = useSelector(state => state.user.profile);
     const users = useSelector(state => state.user.users);
     const error = useSelector(state => state.error);
 
     useEffect(() => {
-        // Check if user not found
-        if (error.id === 'USER_NOT_FOUND') {
-            setErrorMsg("User not found.");
-        } else {
-            setErrorMsg(null);
+        // Handle errors
+        switch (error.id) {
+            case USER_NOT_FOUND:
+                setOpen(true);
+                setErrorMsg("User not found.");
+                break;
+            case DUPLICATE_ERROR:
+                setOpen(true);
+                setErrorMsg("User already added.");
+                break;
+            default:
+                setErrorMsg(null);
         }
     }, [errorMsg, error.id])
 
@@ -35,6 +44,8 @@ function UserDisplay() {
     const handleSubmit = (e) => {
         e.preventDefault();
         clearAlert();
+        const index = users.findIndex(user => user.login === login);
+        if (index !== -1) return dispatch(duplicateError());
         dispatch(addUser(login));
     }
 
@@ -43,10 +54,29 @@ function UserDisplay() {
         setErrorMsg(null);
     }
 
+    const handleClose = () => {
+        clearAlert();
+        setOpen(false);
+    }
+
     return (
         <Container maxWidth="md" align="center" style={{ padding: "1rem" }}>
             {
-                errorMsg ? <Alert severity="error" style={{ marginBottom: "1rem" }}>{errorMsg}</Alert> : null
+                errorMsg ?
+                    <Snackbar
+                        open={open}
+                        onClose={handleClose}
+                        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+                        autoHideDuration={18000}
+                    >
+                        <Alert variant="filled"
+                            severity="error"
+                            onClose={handleClose}
+                            style={{ marginBottom: "1rem" }}
+                        >
+                            {errorMsg}
+                        </Alert>
+                    </Snackbar> : null
             }
             <Box>
                 <form onSubmit={handleSubmit}>
@@ -66,9 +96,7 @@ function UserDisplay() {
                                 bio={user.bio}
                             />
                         </Grid>
-                    ))
-                        :
-                        <Typography variant="h4" color="textSecondary" style={{ marginTop: "1rem" }}>No profiles added</Typography>
+                    )) : <Typography variant="h4" color="textSecondary" style={{ marginTop: "1rem" }}>No profiles added</Typography>
                 }
             </Grid>
         </Container >
