@@ -44,7 +44,8 @@ function UserDisplay() {
     const handleSubmit = (e) => {
         e.preventDefault();
         clearAlert();
-        const index = users.findIndex(user => user.login === login);
+        // Compare user login names and ignore case
+        const index = users.findIndex(user => user.login.toUpperCase() === login.toUpperCase());
         if (index !== -1) return dispatch(duplicateError());
         dispatch(addUser(login));
     }
